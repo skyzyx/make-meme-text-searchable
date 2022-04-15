@@ -81,6 +81,10 @@ make-meme-text-searchable \
     --out-format jpg
 ```
 
+### Web UI
+
+This should be relatively simple to write as long as people can drag-and-drop/upload their images into the webpage, then provide an email address to send the results to (asychronously). A simple desktop app is also possible — maybe with [Electron](https://www.electronjs.org), [Wails](https://wails.io), or [Tauri](https://tauri.studio)?
+
 ## Links
 
 For when I sit down to write actual code.
