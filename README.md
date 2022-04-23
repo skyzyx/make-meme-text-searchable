@@ -62,9 +62,8 @@ func main() {
 
     for _, filename := range files {
         contentAsBytes, _ := os.ReadFile(filename)
-        wordSalad, _ := meme.Rekognize(meme.FormatAsJPEG, contentAsBytes)
-        keywords := meme.DedupeAndSort(wordSalad)
-        _ := meme.WriteKeywords(filename)
+        keywords, _ := meme.GetSanitizedText(meme.FormatAsJPEG, contentAsBytes)
+        _ := meme.WriteKeywords(filename, keywords)
     }
 }
 ```
@@ -74,12 +73,17 @@ func main() {
 (Brainstorming) Something like…
 
 ```bash
-make-meme-text-searchable \
-    --in-dir . \
-    --include *.png \
-    --out-dir ~/Desktop/searchable-memes \
-    --out-format jpg
+meme-text [--report=TEXT|JSON] [--out=FILE] [--outdir=DIR] [--outformat=GIF|HEIC|JPG|PNG|WEBP] [--quiet] [--verbose] [--force] INPUT...
 ```
+
+* `INPUT` is one or more files, directories of files, or globs of files. Supports: GIF, HEIC, JPEG, PNG, WEBP. Also works with `STDIN`.
+* `--report` will write data to `STDOUT` in the specified format.
+* `--out` will write updated image contents to a file with the given name, with the metadata injected.
+* `--outdir` will write updated image contents to a directory with the given name, writing files with the same name, with the metadata injected. Will create the directory if it does not exist.
+* `--outformat` will write a new file in the specified image format. Requires `--out` or `--outdir`.
+* `--quiet` will silence all output.
+* `--verbose` maybe be specified up to 3 times, with increasing levels of verbosity. The default value is equivalent to WARNING. -v, -vv, and -vvv are equivalent to INFO, DEBUG, and TRACE (respectively).
+* `--force` disables any interactive prompts.
 
 ### Web UI
 
