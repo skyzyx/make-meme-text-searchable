@@ -58,7 +58,6 @@ linters:
     - exhaustive
     - exportloopref
     - forcetypeassert
-    - gci
     - gochecknoinits
     - goconst
     - gocritic
@@ -68,7 +67,6 @@ linters:
     - gofmt
     - gofumpt
     - goheader
-    - goimports
     - gomnd
     - gomodguard
     - goprintffuncname
@@ -177,7 +175,31 @@ linters-settings:
   #   lines: 120
   #   statements: 85
 
-  # gci:
+  gci:
+    # Checks that no inline Comments are present.
+    # Default: false
+    no-inline-comments: false
+
+    # Checks that no prefix Comments(comment lines above an import) are present.
+    # Default: false
+    no-prefix-comments: false
+
+    # Section configuration to compare against.
+    # Section names are case-insensitive and may contain parameters in ().
+    Default: ["standard", "default"]
+    sections:
+      - standard # Captures all standard packages if they do not match another section.
+      - default # Contains all imports that could not be matched to another section type.
+      - newLine # Prints an empty line
+      - prefix(github.com/skyzyx) # Groups all imports with the specified Prefix.
+      - newLine # Prints an empty line
+      - prefix(github.com/northwood-labs) # Groups all imports with the specified Prefix.
+
+    # Separators that should be present between sections.
+    Default: ["newLine"]
+    section-separators:
+      - newLine
+
   # gochecknoinits:
 
   goconst:
@@ -239,10 +261,10 @@ linters-settings:
   # gofumpt:
   # goheader:
 
-  goimports:
-    # put imports beginning with prefix after 3rd-party packages;
-    # it's a comma-separated list of prefixes
-    local-prefixes: github.com/skyzyx,github.com/northwood-labs
+#   goimports:
+#     # put imports beginning with prefix after 3rd-party packages;
+#     # it's a comma-separated list of prefixes
+#     local-prefixes: github.com/skyzyx,github.com/northwood-labs
 
   golint:
     # minimal confidence for issues, default is 0.8
@@ -394,6 +416,8 @@ issues:
     - "type jsonschema.Schema has no field or method ValidateBytes"
     - "declarations should never be cuddled"
     - "unnamedResult: consider giving a name to these results"
+    - "Expected '/', Found ' '"
+    - "Expected '\\\\n', Found '\\\\t' at"
 
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
@@ -462,6 +486,11 @@ issues:
       linters:
         - gocritic
       source: "lint:allow_large_memory"
+
+    - text: "(blank-imports)"
+      linters:
+        - revive
+      source: "lint:allow_blank_imports"
 
   # Independently from option `exclude` we use default exclude patterns,
   # it can be disabled by this option. To list all

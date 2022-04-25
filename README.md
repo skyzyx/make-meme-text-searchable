@@ -44,27 +44,60 @@ This project uses [Amazon Rekognition] to read the text from the images, then [g
 
 Someday, I want to learn how to develop mobile apps so that I can solve this user problem. [Compiled Go code can be called from Android and iOS](https://github.com/golang/go/wiki/Mobile).
 
-## Usage
-
-No code is written yet, but I intend to have both an importable Go library, as well as a standalone CLI tool.
+## Progress
 
 ### Library
 
-[Error handling removed for brevity.]
+* [X] Importable with `go get`.
+* [X] Handles image bytestreams and decoding.
+* [X] Handles converting the image to JPEG before passing to Rekognition.
+* [X] Sends data to Rekognition.
+* [X] Parses the results from Rekognition into words.
+* [X] Converts the image bytestream to JPEG before sending to Rekognition.
+* [ ] Preserves any existing EXIF data.
+* [ ] Writes the words into the EXIF data.
 
-(Brainstorming) Something like…
+### CLI Tool
+
+* [ ] Supports reading a file.
+* [ ] Supports reading a directory.
+* [ ] Supports reading a glob.
+* [ ] Supports verbose logging.
+* [X] Supports AWS credentials as environment variables.
+* [ ] Supports AWS credentials as a profile reference.
+* [X] Supports `-v`.
+* [ ] Supports `-vv` and `-vvv`.
+* [ ] Supports `-q`.
+* [ ] Supports outputting a copy to a new directory.
+* [ ] Supports outputting a copy in a new format.
+* [ ] Supports writing the Rekognition results into EXIF data at all.
+* [ ] Supports status updates for jobs.
+* [ ] Supports an index of already-processed images to facilitate restarting a failed queue.
+
+## Usage
+
+### Library
+
+Incomplete example. Error handling removed for brevity.
 
 ```go
 import "github.com/skyzyx/make-meme-text-searchable/meme"
 
 func main() {
-    files, _ := os.ReadDir(".")
+    // Open the file as am io.Reader.
+    r, _ := os.Open("./images/paris-airport.heic")
 
-    for _, filename := range files {
-        contentAsBytes, _ := os.ReadFile(filename)
-        keywords, _ := meme.GetSanitizedText(meme.FormatAsJPEG, contentAsBytes)
-        _ := meme.WriteKeywords(filename, keywords)
-    }
+    // Read the io.Reader, decode the image, then re-encode the image data as JPEG format.
+    buf, _, _, _ := meme.ReadImage(r, meme.DefaultJPEGQuality)
+
+    // Pass the image data to AWS Rekognition.
+    results, _ := meme.DetectText(ctx, &awsConfig, buf)
+
+    // Sanitize, de-dupe, remove punctuation, and sort the resulting words.
+    words := meme.GetSanitizedText(results)
+
+    // Write the string of words back to the image into the EXIF ImageDescription field.
+    _ := meme.WriteImageDescription(r, words)
 }
 ```
 
@@ -88,20 +121,6 @@ meme-text [--report=TEXT|JSON] [--out=FILE] [--outdir=DIR] [--outformat=GIF|HEIC
 ### Web UI
 
 This should be relatively simple to write as long as people can drag-and-drop/upload their images into the webpage, then provide an email address to send the results to (asychronously). A simple desktop app is also possible — maybe with [Electron](https://www.electronjs.org), [Wails](https://wails.io), or [Tauri](https://tauri.studio)?
-
-## Links
-
-For when I sit down to write actual code.
-
-* <https://aws.amazon.com/rekognition/>
-* <https://aws.amazon.com/rekognition/pricing/>
-* <https://github.com/dsoprea/go-exif>
-* <https://github.com/sfomuseum/go-exif-update>
-* <https://github.com/jdeng/goheif>
-* <https://pkg.go.dev/image/gif#Decode>
-* <https://pkg.go.dev/image/png#Decode>
-* <https://pkg.go.dev/image/jpeg#Decode>
-* <https://pkg.go.dev/golang.org/x/image/webp#Decode>
 
   [Amazon Rekognition]: https://aws.amazon.com/rekognition/
   [Go]: https://go.dev

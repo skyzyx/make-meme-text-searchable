@@ -60,11 +60,6 @@ install-deps-mac: _install-go-deps
 #-------------------------------------------------------------------------------
 # Build/Run
 
-.PHONY: fetch
-## fetch: [build] Fetches remote data that is required for building.
-fetch:
-	wget -qq https://data.iana.org/TLD/tlds-alpha-by-domain.txt
-
 .PHONY: tidy
 ## tidy: [build] Updates go.mod and downloads dependencies.
 tidy:
@@ -72,14 +67,16 @@ tidy:
 	$(GO) mod download -x
 	$(GO) get -v ./...
 
-.PHONY: generate
-## generate: [build] Reads the raw list and generates a UTF-8 JSON document.
-generate:
-	go run main.go | tee tlds.json
-
 .PHONY: build
 ## build: [build]* Compiles the final artifacts.
-build: fetch generate clean-files
+build: tidy
+	$(GO) build -ldflags="-s -w  -X main.commit=$$(git rev-parse HEAD) -X main.date=$$(date -I) -X main.version=$$(cat ./VERSION | tr -d '\n')" -o ./bin/meme-text *.go
+
+.PHONY: install
+## install: [build] Installs the command to ~/.bin/, which should be on your PATH.
+install:
+	mkdir -p ~/bin
+	cp -fv bin/meme-text ~/bin/meme-text
 
 #-------------------------------------------------------------------------------
 # Clean
@@ -106,7 +103,8 @@ clean: clean-files
 fmt:
 	@ echo " "
 	@ echo "=====> Running gofumpt..."
-	gofumpt -s -w *.go
+	gofumpt -w *.go
+	gofumpt -w **/*.go
 
 .PHONY: golint
 ## golint: [lint] Runs `golangci-lint` against all Golang files.
@@ -157,3 +155,40 @@ markdownlint:
 .PHONY: lint
 ## lint: [lint]* Runs ALL linting/validation tasks.
 lint: markdownlint fmt golint goupdate goimportorder goconst
+
+#-------------------------------------------------------------------------------
+# Git Tasks
+
+.PHONY: tag
+## tag: [release] Tags (and GPG-signs) the release.
+tag:
+	@ if [ $$(git status -s -uall | wc -l) != 1 ]; then echo 'ERROR: Git workspace must be clean.'; exit 1; fi;
+
+	@echo "This release will be tagged as: $$(cat ./VERSION)"
+	@echo "This version should match your release. If it doesn't, re-run 'make version'."
+	@echo "---------------------------------------------------------------------"
+	@read -p "Press any key to continue, or press Control+C to cancel. " x;
+
+	@echo " "
+	@chag update $$(cat ./VERSION)
+	@echo " "
+
+	@echo "These are the contents of the CHANGELOG for this release. Are these correct?"
+	@echo "---------------------------------------------------------------------"
+	@chag contents
+	@echo "---------------------------------------------------------------------"
+	@echo "Are these release notes correct? If not, cancel and update CHANGELOG.md."
+	@read -p "Press any key to continue, or press Control+C to cancel. " x;
+
+	@echo " "
+
+	git add .
+	git commit -a -m "Preparing the $$(cat ./VERSION) release."
+	chag tag --sign
+
+.PHONY: version
+## version: [release] sets the version for the next release; pre-req for a release tag
+version:
+	@echo "Current version: $$(cat ./VERSION)"
+	@read -p "Enter new version number: " nv; \
+	printf "$$nv" > ./VERSION
