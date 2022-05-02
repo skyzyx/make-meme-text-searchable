@@ -119,6 +119,16 @@ meme-text [--report=TEXT|JSON] [--out=FILE] [--outdir=DIR] [--outformat=GIF|HEIC
 
 This should be relatively simple to write as long as people can drag-and-drop/upload their images into the webpage, then provide an email address to send the results to (asychronously). A simple desktop app is also possible — maybe with [Electron](https://www.electronjs.org), [Wails](https://wails.io), or [Tauri](https://tauri.studio)?
 
+## Things to read
+
+Things I need to read and understand. Apparently _writing_ EXIF data can be non-trivial.
+
+* <https://en.wikipedia.org/wiki/Exif>
+* <https://pkg.go.dev/github.com/dsoprea/go-jpeg-image-structure#example-SegmentList-SetExif>
+* <https://github.com/dsoprea/go-jpeg-image-structure/blob/502ec55f4b9caf576fc0ba8429450022a9fc3285/jpeg_test.go#L179>
+* <https://github.com/dsoprea/go-jpeg-image-structure/blob/eac4d3269d730aa516c7b18d4d396ba304d4bfd8/jpeg.go#L411>
+* <https://go.dev/blog/defer-panic-and-recover>
+
   [Amazon Rekognition]: https://aws.amazon.com/rekognition/
   [Go]: https://go.dev
   [Node.js]: https://nodejs.org

@@ -104,6 +104,11 @@ func main() {
 		}
 
 		// exif
+		err = meme.WriteImageDescription(r, wr, strings.Join(words, " "))
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s\n", err)
+			os.Exit(1)
+		}
 
 		err = r.Close()
 		if err != nil {
