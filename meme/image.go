@@ -15,27 +15,7 @@ import (
 	_ "golang.org/x/image/webp" // lint:allow_blank_imports
 )
 
-// Format is a string type represents the image format.
-type Format string
-
 const (
-	// FormatUnknown represents an unknown format.
-	FormatUnknown Format = ""
-	// FormatBMP represents the BMP format.
-	FormatBMP Format = "bmp"
-	// FormatGIF represents the GIF format.
-	FormatGIF Format = "gif"
-	// FormatHEIC represents the HEIC format.
-	FormatHEIC Format = "heic"
-	// FormatJPEG represents the JPEG format.
-	FormatJPEG Format = "jpeg"
-	// FormatPNG represents the PNG format.
-	FormatPNG Format = "png"
-	// FormatTIFF represents the TIFF format.
-	FormatTIFF Format = "tiff"
-	// FormatWEBP represents the WebP format.
-	FormatWEBP Format = "webp"
-
 	// DefaultJPEGQuality is the default JPEG compression quality.
 	DefaultJPEGQuality = 80
 )

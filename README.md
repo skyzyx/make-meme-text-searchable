@@ -59,9 +59,9 @@ Someday, I want to learn how to develop mobile apps so that I can solve this use
 
 ### CLI Tool
 
-* [ ] Supports reading a file.
-* [ ] Supports reading a directory.
-* [ ] Supports reading a glob.
+* [X] Supports reading a file.
+* [X] Supports reading a directory.
+* [X] Supports reading a glob.
 * [ ] Supports verbose logging.
 * [X] Supports AWS credentials as environment variables.
 * [ ] Supports AWS credentials as a profile reference.
@@ -111,9 +111,6 @@ meme-text [--report=TEXT|JSON] [--out=FILE] [--outdir=DIR] [--outformat=GIF|HEIC
 
 * `INPUT` is one or more files, directories of files, or globs of files. Supports: GIF, HEIC, JPEG, PNG, WEBP. Also works with `STDIN`.
 * `--report` will write data to `STDOUT` in the specified format.
-* `--out` will write updated image contents to a file with the given name, with the metadata injected.
-* `--outdir` will write updated image contents to a directory with the given name, writing files with the same name, with the metadata injected. Will create the directory if it does not exist.
-* `--outformat` will write a new file in the specified image format. Requires `--out` or `--outdir`.
 * `--quiet` will silence all output.
 * `--verbose` maybe be specified up to 3 times, with increasing levels of verbosity. The default value is equivalent to WARNING. -v, -vv, and -vvv are equivalent to INFO, DEBUG, and TRACE (respectively).
 * `--force` disables any interactive prompts.
