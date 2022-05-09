@@ -24,6 +24,7 @@ const defaultRetries = 5
 var errFilePattern = errors.New("a file pattern is required")
 
 func main() {
+	pp := debug.GetSpew()
 	ctx := context.Background()
 	logger := log.GetStdTextLogger()
 
