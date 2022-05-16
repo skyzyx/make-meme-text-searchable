@@ -30,7 +30,7 @@ help:
 	@ sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/ /' | \
 		while IFS= read -r line; do \
 			if [[ "$$line" == *"]*"* ]]; then \
-				$(ECHO) -e "\033[1;33m$$line\033[0m"; \
+				$(ECHO) "\033[1;33m$$line\033[0m"; \
 			else \
 				$(ECHO) "$$line"; \
 			fi; \
