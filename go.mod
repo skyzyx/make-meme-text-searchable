@@ -14,7 +14,7 @@ require (
 	github.com/northwood-labs/golang-utils/log v0.0.0-20220424213942-c64823036513
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/image v0.0.0-20220413100746-70e8d0d3baa9
+	golang.org/x/image v0.5.0
 )
 
 require (
@@ -36,6 +36,6 @@ require (
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/rs/zerolog v1.26.1 // indirect
 	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd // indirect
-	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
+	golang.org/x/net v0.0.0-20220722155237-a158d28d115b // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
