@@ -36,6 +36,6 @@ require (
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/rs/zerolog v1.26.1 // indirect
 	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd // indirect
-	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
+	golang.org/x/net v0.7.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
